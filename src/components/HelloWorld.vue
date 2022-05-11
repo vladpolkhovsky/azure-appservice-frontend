@@ -5,16 +5,7 @@ export default {
     return {
       varName: '',
       varValue: '',
-      variables: [
-        {
-          name: "name1",
-          value: "value1"
-        },
-        {
-          name: "name2",
-          value: "value2"
-        }
-      ]
+      variables: []
     }
   },
 
@@ -24,6 +15,13 @@ export default {
 
   methods: {
     onSend() {
+      fetch(process.env.API_DOMAIN + "/set/" + this.varName + "?value=" + this.varValue, {
+        method: "POST"
+      }).then(resp => {
+        console.log(resp);
+      }).catch(err => {
+        alert(err);
+      });
       this.varName = '';
       this.varValue = '';
     },
@@ -31,7 +29,15 @@ export default {
       return this.varName.length === 0 || this.varValue.length === 0;
     },
     updateTable() {
-
+      fetch(process.env.API_DOMAIN + "/all",{
+        method: "GET"
+      }).then(resp => {
+        resp.text()
+            .then(txt => this.variables = JSON.parse(txt))
+            .catch(err => alert(err));
+      }).catch(err => {
+        alert(err);
+      })
     }
   }
 }
