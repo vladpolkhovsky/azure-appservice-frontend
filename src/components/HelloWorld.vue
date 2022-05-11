@@ -15,11 +15,13 @@ export default {
 
   methods: {
     onSend() {
-      fetch(process.env.API_DOMAIN + "/set/" + this.varName + "?value=" + this.varValue, {
-        method: "POST"
+      fetch("https://propservice-pvg-api.azurewebsites.net/set/" + this.varName + "?value=" + this.varValue, {
+        method: "POST",
+        mode: "same-origin"
       }).then(resp => {
         console.log(resp);
       }).catch(err => {
+        console.log(err.text);
         alert(err);
       });
       this.varName = '';
@@ -29,13 +31,20 @@ export default {
       return this.varName.length === 0 || this.varValue.length === 0;
     },
     updateTable() {
-      fetch(process.env.API_DOMAIN + "/all",{
+      fetch("https://propservice-pvg-api.azurewebsites.net/all",{
         method: "GET"
       }).then(resp => {
+        console.log(resp.text())
         resp.text()
-            .then(txt => this.variables = JSON.parse(txt))
-            .catch(err => alert(err));
+            .then(txt => {
+              console.log(txt);
+              this.variables = JSON.parse(txt);
+            }).catch(err => {
+              console.log(err.text)
+              alert(err)
+            });
       }).catch(err => {
+        console.log(err.text);
         alert(err);
       })
     }
