@@ -16,8 +16,7 @@ export default {
   methods: {
     onSend() {
       fetch("https://propservice-pvg-api.azurewebsites.net/set/" + this.varName + "?value=" + this.varValue, {
-        method: "POST",
-        mode: "same-origin"
+        method: "POST"
       }).then(resp => {
         console.log(resp);
       }).catch(err => {
@@ -34,17 +33,15 @@ export default {
       fetch("https://propservice-pvg-api.azurewebsites.net/all",{
         method: "GET"
       }).then(resp => {
-        console.log(resp.text())
         resp.text()
             .then(txt => {
               console.log(txt);
               this.variables = JSON.parse(txt);
             }).catch(err => {
-              console.log(err.text)
-              alert(err)
+              console.log(err.text);
+              alert(err);
             });
       }).catch(err => {
-        console.log(err.text);
         alert(err);
       })
     }
